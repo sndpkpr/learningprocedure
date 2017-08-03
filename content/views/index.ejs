@@ -1,0 +1,54 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <p>
+        <h4>THIS OBJECT OF MONGO IS FOR TESTING</h4>
+        <%= detai %>
+        <h4>_________________________________________________________________________________________________________________________</h4>
+    </p>
+</head>
+
+ <body>
+    <form action="/add" method="post">
+        Name:<br><input type="text" name="username" style="width:520px"/><br>
+        Password:<br><input type="password" name='password' style="width:520px"><br>
+        Phone:<br><input type='number' name='userphone' style="width:520px" /><br> 
+        Email:<br><input type='text' name='email' style="width:520px" /><br>
+        <input type="submit" value="ADD" />
+    </form>
+<% var p = 5 %>
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ <form method="get" action="/delete %>">
+    <table id="myTable" style="border: 1px solid black; width:50%">
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>PHONE</th>
+            <th>EMAIL</th>
+        </tr>
+        <% for(var i=0 ; i< detai.length ; i++) {%>
+            <tr>
+                <td>
+                    <%= detai[i].id %>
+                </td>
+                <td>
+                    <%= detai[i].name %>
+                </td>
+                <td>
+                    <%= detai[i].phone %>
+                </td>
+                <td>
+                    <%= detai[i].email %>
+                </td>
+                <td><input type="submit" value="delete" name=<%= detai[i].id %>><td>
+                <td><input type="submit" value="update" name=<%= detai[i].id %>><td>
+            </tr>
+        <% } %>
+    </table>
+    </form>
+</body>
+
+
+</html> 

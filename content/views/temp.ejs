@@ -1,0 +1,14 @@
+<!-- <%= detai %>
+<br><br>
+<%= identiy %>
+<br><br>
+<%= detai.name %>
+<br><br> -->
+
+<form action="/update" method="post">
+    <br><input type="text" name="mongoid" value=<%= detai._id %> readonly="readonly" style="display: none" ><br><br>
+    Name:<br><input type="text" name="username" value=<%= detai.name %>><br> 
+    Phne:<br><input type='number' name='userphone' value=<%= detai.phone %>><br>
+     Email:<br><input type='password' name='email' value=<%= detai.email %>><br>
+    <input type="submit" value="UPDATE" />
+</form>
