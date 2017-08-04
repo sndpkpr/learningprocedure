@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 //details scheema
 
-var detailSchema = mongoose.Schema({
+mongoose.model('details',{
     username: {
         type: String,
     },
@@ -14,11 +14,13 @@ var detailSchema = mongoose.Schema({
     },
     phone: {
         type: String,
+        index: { unique: true }
     },
     email: {
         type: String,
+        index: { unique: true }
     }
 });
 
 
-var Detail = module.exports = mongoose.model('details', detailSchema)         //variable to export
+//var Detail = module.exports = mongoose.model('details', detailSchema)         //variable to export
