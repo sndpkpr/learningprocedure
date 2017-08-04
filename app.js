@@ -10,6 +10,7 @@ var LocalStrategy = require('passport-local').Strategy
 var mongoose = require('mongoose');
 var MongoClient = require('mongodb').MongoClient
 
+
 mongoose.connect('mongodb://localhost/datbaseuserdetail', { useMongoClient: true });    //connect to our database  -> nodesan is the name of our database
 var db = mongoose.connection;     //create variable called bd and set that equal to mongooseconnection
 mongoose.set('debug', true);
@@ -17,14 +18,14 @@ mongoose.set('debug', true);
 ////////////////////////////////////////////////
 MongoClient.connect('mongodb://localhost/datbaseuserdetail')
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
+passport.serializeUser(function (user, done) {
+    done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  Something.findById(id, function (err, user) {
-    done(err, user);
-  });
+passport.deserializeUser(function (id, done) {
+    Something.findById(id, function (err, user) {
+        done(err, user);
+    });
 });
 
 ////////////////////////////////////////////////
@@ -47,7 +48,10 @@ var app = express();
 // }
 
 
-var Something = require('./models/articles')
+require('./models/articles')
+var Something = mongoose.model('details')
+var Everything = require('./models/seconds')
+var Everythingx = mongoose.model('seconds')
 
 //view engine
 app.set('view engine', 'ejs')
@@ -68,13 +72,13 @@ app.use(express.static(path.join(__dirname, 'content')))
 passport.use(new LocalStrategy(
     function (username, password, done) {
         //console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Inside LOCAL")
-        Something.findOne({ username: username,password:password }, function (err, user) { 
+        Something.findOne({ username: username, password: password }, function (err, user) {
             //console.log("******************************************************",user)   
             if (err) { return done(err); }
             if (!user) { return done(null, false); }
             //if (!user.verifyPassword(password)) { return done(null, false); }
             else
-            return done(null, user);
+                return done(null, user);
         });
     }
 ));
@@ -88,11 +92,12 @@ app.get('/', function (req, res) {
         else {
             //console.log(details)
             res.render('index', {
-                detai: details
+                detai: details,
             })
         }
     })
 })
+
 
 
 app.post('/add', function (req, res) {
@@ -100,7 +105,7 @@ app.post('/add', function (req, res) {
     var userphone = req.body.userphone;
     var usermail = req.body.email;
     var userpass = req.body.password;
-    console.log(userpass)
+    var generatedid = "7";
     var newentry = {
         username: username,
         name: username,
@@ -108,17 +113,50 @@ app.post('/add', function (req, res) {
         email: usermail,
         password: userpass
     }
+
     MongoClient.connect('mongodb://localhost/datbaseuserdetail', function (err, db) {
-        db.collection("details").insertOne(newentry, function (err, res) {
+        db.collection("details").insertOne(newentry, function (err, result) {
+            if (err) throw err;
+            db.close();
+            generatedid = result.insertedId
+            //console.log("I WAS HERE TOO")
+            res.render('moredata', {
+                generatedid: generatedid
+            })
+        })
+    })
+
+})
+
+
+
+app.post('/addmetoo', function (req, res) {
+    var address = req.body.address;
+    var comment = req.body.comment;
+    var commonkey = req.body.commonkey
+
+    var newentry = {
+        commonkey: commonkey,
+        address: address,
+        comment: comment
+    }
+
+    MongoClient.connect('mongodb://localhost/datbaseuserdetail', function (err, db) {
+        db.collection("seconds").insertOne(newentry, function (err, ress) {
             if (err) throw err;
             db.close();
         })
     })
-    res.redirect('/')
-})
 
-app.get('/fail', function (req, res) {
-    res.render('fail')
+    Everything.find().exec(function (err, details) {
+        if (err) {
+            console.log('error in finding details in database')
+        }
+        else {
+            //res.send('record added')
+            res.redirect('/');
+        }
+    })
 })
 
 
@@ -146,19 +184,25 @@ app.get('/delete', function (req, res) {
 
 })
 
+app.get('/fail', function (req, res) {
+    res.render('fail')
+})
+
 
 app.post('/update', function (req, res) {
     var userid = req.body.mongoid
     var newusername = req.body.username
     var newuserphone = req.body.userphone
     var newuseremail = req.body.email
+    var newpassword = req.body.password
 
     Something.update(
         { _id: userid },
         {
             name: newusername,
             phone: newuserphone,
-            email: newuseremail
+            email: newuseremail,
+            password: newpassword
         },
         { multi: true },
         function (err, detail) {
