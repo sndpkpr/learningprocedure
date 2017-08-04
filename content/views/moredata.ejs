@@ -1,0 +1,17 @@
+<html>
+
+<head>
+    <title>MOREinfo</title>
+    <%= generatedid %>
+</head>
+
+<body>
+    <form method="POST" action="/addmetoo">
+        <input type="text" name="commonkey" value=<%= generatedid %> readonly="readonly" style="display: none" ><br><br>
+        ADDRESS:<br><input type="text" name="address" style="width:400px;height:40px" /><br>
+        COMMENT:<br><input type="text" name="comment" style="width:400px;height:40px" /><br>
+        <input type="submit" value="ADD">
+    </form>
+</body>
+
+</html>
